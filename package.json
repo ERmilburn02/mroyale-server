@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node index"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/MRoyale/mroyale-server/issues"
   },
-  "homepage": "https://github.com/MRoyale/mroyale-server#readme"
+  "homepage": "https://github.com/MRoyale/mroyale-server#readme",
+  "dependencies": {
+    "argon2": "^0.26.1"
+  }
 }
