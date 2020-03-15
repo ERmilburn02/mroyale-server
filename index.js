@@ -17,9 +17,11 @@ function toString(buffer) {
 }
 
 async function main(argv) {
+    var server = this;
+
     app.ws('/*', {
         open: (ws, req) => {
-            ws.container = new Container(ws);
+            ws.container = new Container(server, ws);
             ws.container.onOpen(ws, req);
         },
         close: (ws, code, message) => { ws.container.onClose(ws, code, toString(message)) },
