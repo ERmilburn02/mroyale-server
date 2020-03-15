@@ -7,7 +7,7 @@ class Container {
     onOpen(ws, req) {
         this.address = req.getHeader('x-forwarded-for');
         if (this.address == '') {
-            this.address = Buffer.from(ws.getRemoteAddress()).slice(-4, 16); // HACK: For some reason, uWS keeps returning full 16 byte IP addresses... Wtf?
+            this.address = Buffer.from(ws.getRemoteAddress()).slice(-4, 16); // FIXME: For some reason, uWS keeps returning full 16 byte IP addresses? Wtf.
         }
     }
 
