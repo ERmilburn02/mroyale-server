@@ -1,7 +1,7 @@
 const Match = require('./match');
 const Player = require('./player');
 
-class Container {
+class Client {
     constructor(server, ws) {
         this.server = server;
         this.ws = ws;
@@ -68,8 +68,29 @@ class Container {
     }
 
     onBinaryMessage(ws, message) {
-        console.log(`Binary message recieved: ${message}`);
+        var code = message[0];
+        if (!(code in Client.CODE_LENGTH)) {
+            console.log('PACKET NOT AVAILABLE ' + code);
+            return;
+        }
+
+        var length = Client.CODE_LENGTH[code] + 1;
+        if (message.length < length) {
+            console.log('LENGTH CHECK FAILED');
+            return;
+        }
+
+        message = message.slice(1);
+
+        // TODO: https://github.com/gyorokpeter/mroyale-server/blob/baf04bf52031d1dee5e8fe6eb57eeffeaf0fe768/server.py#L487
+
+        //this.player.handleBinary(code, message);
+
+        console.log(`Binary message recieved: ${Buffer.from(message).toString('hex')}`);
     }
 }
 
-module.exports = Container;
+/* Constants */
+Client.CODE_LENGTH = {0x10: 6, 0x11: 0, 0x12: 12, 0x13: 1, 0x17: 2, 0x18: 4, 0x19: 0, 0x20: 7, 0x30: 7};
+
+module.exports = Client;

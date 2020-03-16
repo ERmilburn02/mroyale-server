@@ -7,29 +7,34 @@ if (!fs.existsSync('./config.json')) {
 
 const config = require('./config.json');
 
+const utils = require('./utils');
+
 const uws = require('uWebSockets.js');
 const app = uws.App();
 
-const Container = require('./container');
+const Client = require('./client');
 
-function toString(buffer) {
-    return Buffer.from(buffer).toString('utf8');
-}
+var players = [];
+var matches = [];
 
 async function main(argv) {
     var server = this;
 
     app.ws('/*', {
         open: (ws, req) => {
-            ws.container = new Container(server, ws);
-            ws.container.onOpen(ws, req);
+            ws.client = new Client(server, ws);
+            ws.client.onOpen(ws, req);
         },
-        close: (ws, code, message) => { ws.container.onClose(ws, code, toString(message)) },
+        close: (ws, code, message) => { ws.client.onClose(ws, code, utils.bufferToString(message)) },
         message: (ws, message, isBinary) => {
+            if (message.length == 0) {
+                return;
+            }
+
             if (!isBinary) {
-                ws.container.onTextMessage(ws, toString(message));
+                ws.client.onTextMessage(ws, utils.bufferToString(message));
             } else {
-                ws.container.onBinaryMessage(ws, message)
+                ws.client.onBinaryMessage(ws, message)
             }
         }
     });
